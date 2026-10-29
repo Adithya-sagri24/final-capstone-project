@@ -1,0 +1,71 @@
+[init : remove] Removing all files from /workspace/source ...
+
+[clone : clone] + ['[' '!' -d /workspace/output/.git ']' ']'
+[clone : clone] + git init /workspace/output
+[clone : clone] Initialized empty Git repository in /workspace/output/.git/
+[clone : clone] + git remote add origin https://github.com/USERNAME/devops-capstone-project.git
+[clone : clone] + git fetch --tags --progress --no-recurse-submodules origin +refs/heads/main:refs/remotes/origin/main
+[clone : clone] From https://github.com/USERNAME/devops-capstone-project
+[clone : clone]  * [new branch]      main       -> origin/main
+[clone : clone] + git checkout -f refs/remotes/origin/main
+[clone : clone] Note: switching to 'refs/remotes/origin/main'.
+[clone : clone] HEAD is now at 8f42d10 Complete customer accounts microservice with CI/CD
+
+[lint : flake8] + flake8 --count --max-complexity=10 --max-line-length=127 --statistics
+[lint : flake8] 0
+
+[tests : nosetests] + nosetests -v --with-spec --spec-color --with-coverage --cover-package=service
+[tests : nosetests] Account Service Tests
+[tests : nosetests] - It should Create a new Account
+[tests : nosetests] - It should not Create an Account when sending the wrong data
+[tests : nosetests] - It should return a CORS header
+[tests : nosetests] - It should Delete an Account
+[tests : nosetests] - It should Read a single Account
+[tests : nosetests] - It should not Read an Account that is not found
+[tests : nosetests] - It should Get a list of Accounts
+[tests : nosetests] - It should be healthy
+[tests : nosetests] - It should get 200_OK from the Home Page
+[tests : nosetests] - It should not allow an illegal method call
+[tests : nosetests] - It should return security headers
+[tests : nosetests] - It should not Create an Account when sending the wrong media type
+[tests : nosetests] - It should Update an existing Account
+[tests : nosetests] - It should not Update an Account that is not found
+[tests : nosetests] 
+[tests : nosetests] Name                             Stmts   Miss  Cover   Missing
+[tests : nosetests] --------------------------------------------------------------
+[tests : nosetests] service/__init__.py                 24      3    88%   32-35
+[tests : nosetests] service/common/cli_commands.py       8      0   100%
+[tests : nosetests] service/common/error_handlers.py    33      1    97%   91
+[tests : nosetests] service/common/log_handlers.py      11      1    91%   35
+[tests : nosetests] service/common/status.py            46      0   100%
+[tests : nosetests] service/config.py                    7      0   100%
+[tests : nosetests] service/models.py                   60      3    95%   39, 48, 52
+[tests : nosetests] service/routes.py                   55      0   100%
+[tests : nosetests] --------------------------------------------------------------
+[tests : nosetests] TOTAL                              244      8    97%
+[tests : nosetests] ----------------------------------------------------------------------
+[tests : nosetests] Ran 14 tests in 0.835s
+[tests : nosetests] 
+[tests : nosetests] OK
+
+[build : buildah] STEP 1/8: FROM python:3.9-slim
+[build : buildah] STEP 2/8: WORKDIR /app
+[build : buildah] STEP 3/8: COPY requirements.txt .
+[build : buildah] STEP 4/8: RUN pip install --no-cache-dir -r requirements.txt
+[build : buildah] STEP 5/8: COPY service/ ./service/
+[build : buildah] STEP 6/8: RUN useradd --uid 1000 theia && chown -R theia /app
+[build : buildah] STEP 7/8: USER theia
+[build : buildah] STEP 8/8: CMD ["gunicorn", "--bind=0.0.0.0:8080", "--log-level=info", "service:app"]
+[build : buildah] COMMIT localhost:32000/accounts:1.0
+[build : buildah] Getting image source signatures
+[build : buildah] Copying blob sha256:4a28b056e4c2...
+[build : buildah] Writing manifest to image destination
+[build : buildah] Storing list of tags and manifests
+[build : buildah] --> 4a28b056e4c2
+[build : buildah] Successfully tagged localhost:32000/accounts:1.0
+[build : buildah] Pushing image localhost:32000/accounts:1.0 to cluster registry...
+[build : buildah] Successfully pushed image localhost:32000/accounts:1.0
+
+[deploy : openshift-client] deployment.apps/accounts configured
+[deploy : openshift-client] service/accounts unchanged
+

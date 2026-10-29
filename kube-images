@@ -1,0 +1,4 @@
+REPOSITORY                 TAG       IMAGE ID       CREATED         SIZE
+accounts                   1.0       4a28b056e4c2   5 minutes ago   148MB
+localhost:32000/accounts   1.0       4a28b056e4c2   5 minutes ago   148MB
+
